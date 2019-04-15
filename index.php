@@ -63,10 +63,6 @@ $user_name = 'Inna'; // укажите здесь ваше имя
         </ul>
     </section>
     <section class="lots">
-        <div class="lots__header">
-            <h2>Открытые лоты</h2>
-        </div>
-
         <?php
         $adds = [
             [
@@ -107,6 +103,9 @@ $user_name = 'Inna'; // укажите здесь ваше имя
             ]
         ]
         ;?>
+        <div class="lots__header">
+            <h2>Открытые лоты</h2>
+        </div>
         <ul class="lots__list">
             <!--заполните этот список из массива с товарами-->
             <?php foreach ($adds as $key => $val): ?>
