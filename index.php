@@ -43,6 +43,16 @@ $lots = [
         'image' => 'img/lot-6.jpg'
     ]
 ];
+
+const RUB = '<b class="rub">р</b>';
+
+function formatting_amount ($amount) {
+    $amount = ceil($amount);
+    if ($amount >= 1000) {
+        $amount = number_format($amount, null, null, ' ');
+    }
+    return $amount . RUB;
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -119,7 +129,7 @@ $lots = [
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?=$lot['price']; ?><b class="rub">р</b></span>
+                            <span class="lot__cost"><?=formatting_amount($lot['price']); ?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
