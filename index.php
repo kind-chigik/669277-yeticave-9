@@ -44,12 +44,15 @@ $lots = [
     ]
 ];
 
+
+const RUB = '<b class="rub">р</b>';
+
 function formatting_amount ($amount) {
-    $round_amount = ceil($amount);
-    if ($round_amount >1000) {
-        $format_amount = number_format($round_amount, 0, '', ' ');
+    $amount = ceil($amount);
+    if ($amount >= 1000) {
+        $amount = number_format($amount, null, null, ' ');
     }
-    return $format_amount;
+    return $amount . RUB;
 }
 ?>
 <!DOCTYPE html>
@@ -127,7 +130,7 @@ function formatting_amount ($amount) {
                     <div class="lot__state">
                         <div class="lot__rate">
                             <span class="lot__amount">Стартовая цена</span>
-                            <span class="lot__cost"><?=formatting_amount($lot['price']); ?><b class="rub">р</b></span>
+                            <span class="lot__cost"><?=formatting_amount($lot['price']); ?></span>
                         </div>
                         <div class="lot__timer timer">
                             12:23
