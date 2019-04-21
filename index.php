@@ -46,16 +46,6 @@ $lots = [
     ]
 ];
 
-const RUB = '<b class="rub">р</b>';
-
-function formatting_amount ($amount) {
-    $amount = ceil($amount);
-    if ($amount >= 1000) {
-        $amount = number_format($amount, null, null, ' ');
-    }
-    return $amount . RUB;
-};
-
 $page_content = include_template('index.php', [
     'categories' => $categories,
     'lots' => $lots
@@ -70,5 +60,5 @@ $layout_content = include_template('layout.php', [
 ]);
 
 print($layout_content);
-?>
+
 
