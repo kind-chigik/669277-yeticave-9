@@ -43,8 +43,6 @@ $lots = [
         'image' => 'img/lot-6.jpg'
     ]
 ];
-
-
 const RUB = '<b class="rub">р</b>';
 
 function formatting_amount ($amount) {
