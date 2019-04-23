@@ -1,4 +1,14 @@
 <?php
+const RUB = '<b class="rub">р</b>';
+
+function formatting_amount ($amount) {
+    $amount = ceil($amount);
+    if ($amount >= 1000) {
+        $amount = number_format($amount, null, null, ' ');
+    }
+    return $amount . RUB;
+};
+
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
