@@ -153,4 +153,23 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
+function formatting_time_lot(string $time_lot) {
+    $time_lot = strtotime('now');
+    $time_lot_end = strtotime('tomorrow');
+    $time_diff =  $time_lot_end - $time_lot;
+    $hours = floor($time_diff / 3600);
+    $minutes = floor(($time_diff % 3600) / 60);
+    $formatting_time = $hours. ":". $minutes;
 
+    return $formatting_time;
+}
+
+function enough_diff_time ($time_current) {
+    $time_current = strtotime('now');
+    $time_end = strtotime('tomorrow');
+    $enough_time = false;
+    if (($time_end - $time_current) <= 3600) {
+        $enough_time = true;
+    }
+    return $enough_time;
+}
