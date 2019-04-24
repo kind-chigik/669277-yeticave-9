@@ -1,5 +1,6 @@
 <?php
 const RUB = '<b class="rub">р</b>';
+const HOUR = 3600;
 
 function formatting_amount ($amount) {
     $amount = ceil($amount);
@@ -153,23 +154,23 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-function formatting_time_lot(string $time_lot) {
-    $time_lot = strtotime('now');
-    $time_lot_end = strtotime('tomorrow');
-    $time_diff =  $time_lot_end - $time_lot;
-    $hours = floor($time_diff / 3600);
-    $minutes = floor(($time_diff % 3600) / 60);
-    $formatting_time = $hours. ":". $minutes;
-
+function time_before_end (string $end_time) {
+    $end_time = strtotime('tomorrow');
+    $time_diff =  $end_time - time();
+    $hours = floor($time_diff / HOUR);
+    $minutes = floor(($time_diff % HOUR) / 60);
+    $formatting_time = sprintf("%'.02d", $hours) . ":" . sprintf("%'.02d", $minutes);
+    if ($time_diff < 0) {
+        return '00:00';
+    }
     return $formatting_time;
 }
 
-function enough_diff_time ($time_current) {
-    $time_current = strtotime('now');
-    $time_end = strtotime('tomorrow');
-    $enough_time = false;
-    if (($time_end - $time_current) <= 3600) {
-        $enough_time = true;
+function less_hour_left ($end_time) {
+    $end_time = strtotime('tomorrow');
+    $time_diff = $end_time - time();
+    if ($time_diff > HOUR || $time_diff <= 0) {
+        return false;
     }
-    return $enough_time;
+    return $true;
 }
