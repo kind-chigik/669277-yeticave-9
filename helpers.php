@@ -1,6 +1,7 @@
 <?php
 const RUB = '<b class="rub">р</b>';
 const HOUR = 3600;
+const MINUTE = 60;
 
 function formatting_amount ($amount) {
     $amount = ceil($amount);
@@ -157,12 +158,12 @@ function include_template($name, array $data = []) {
 function time_before_end (string $end_time) {
     $end_time = strtotime('tomorrow');
     $time_diff =  $end_time - time();
-    $hours = floor($time_diff / HOUR);
-    $minutes = floor(($time_diff % HOUR) / 60);
-    $formatting_time = sprintf("%'.02d", $hours) . ":" . sprintf("%'.02d", $minutes);
     if ($time_diff < 0) {
         return '00:00';
     }
+    $hours = floor($time_diff / HOUR);
+    $minutes = floor(($time_diff % HOUR) / MINUTE);
+    $formatting_time = sprintf("%'.02d", $hours) . ":" . sprintf("%'.02d", $minutes);
     return $formatting_time;
 }
 
@@ -172,5 +173,5 @@ function less_hour_left ($end_time) {
     if ($time_diff > HOUR || $time_diff <= 0) {
         return false;
     }
-    return $true;
+    return true;
 }

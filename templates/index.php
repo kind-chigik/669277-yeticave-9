@@ -29,7 +29,7 @@
                             <span class="lot__amount">Стартовая цена</span>
                             <span class="lot__cost"><?=formatting_amount($lot['price']); ?></span>
                         </div>
-                        <div class="lot__timer timer <?php if(less_hour_left('tomorrow')): ?>timer--finishing<?php endif; ?>">
+                        <div class="lot__timer timer <?= less_hour_left('tomorrow') ? 'timer--finishing' : '' ?>">
                             <?=time_before_end('tomorrow'); ?>
                         </div>
                     </div>
