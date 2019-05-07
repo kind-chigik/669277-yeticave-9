@@ -31,6 +31,7 @@ CREATE TABLE lot (
   user_id INT NOT NULL,
   winner_id INT,
   category_id INT NOT NULL,
+  INDEX (creation_time),
   FOREIGN KEY (user_id) REFERENCES user (id),
   FOREIGN KEY (winner_id) REFERENCES user (id),
   FOREIGN KEY (category_id) REFERENCES category (id)
