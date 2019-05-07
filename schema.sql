@@ -5,31 +5,32 @@ USE yeticave;
 
 CREATE TABLE category (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  name CHAR(128) UNIQUE,
-  alias CHAR(64) UNIQUE
+  name VARCHAR(128) NOT NULL UNIQUE,
+  alias VARCHAR(64) NOT NULL UNIQUE
 );
 
 CREATE TABLE user (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  email CHAR(128) NOT NULL UNIQUE,
-  name CHAR(64) NOT NULL,
-  password CHAR(64) NOT NULL,
-  avatar CHAR(128),
-  contact TEXT NOT NULL,
-  FOREIGN KEY (lot_id) REFERENCES lot (id),
-  FOREIGN KEY (rate_id) REFERENCES rate (id)
+  creation_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+  email VARCHAR(128) NOT NULL UNIQUE,
+  name VARCHAR(64) NOT NULL,
+  password VARCHAR(64) NOT NULL,
+  avatar VARCHAR(128),
+  contact TEXT NOT NULL
 );
 
 CREATE TABLE lot (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  name CHAR(128) NOT NULL,
+  creation_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+  name VARCHAR(128) NOT NULL,
   description TEXT NOT NULL,
-  image CHAR(128) NOT NULL,
+  image VARCHAR(128) NOT NULL,
   start_price INT NOT NULL,
-  end_time TIMESTAMP,
-  step INT,
+  end_time DATETIME NOT NULL,
+  step INT NOT NULL,
+  user_id INT NOT NULL,
+  winner_id INT,
+  category_id INT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user (id),
   FOREIGN KEY (winner_id) REFERENCES user (id),
   FOREIGN KEY (category_id) REFERENCES category (id)
@@ -37,8 +38,10 @@ CREATE TABLE lot (
 
 CREATE TABLE rate (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  creation_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  creation_time DATETIME DEFAULT CURRENT_TIMESTAMP,
   amount INT NOT NULL,
+  user_id INT NOT NULL,
+  lot_id INT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES user (id),
   FOREIGN KEY (lot_id) REFERENCES lot (id)
 );
