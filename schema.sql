@@ -16,7 +16,8 @@ CREATE TABLE user (
   name VARCHAR(64) NOT NULL,
   password VARCHAR(64) NOT NULL,
   avatar VARCHAR(128),
-  contact TEXT NOT NULL
+  contact TEXT NOT NULL,
+  INDEX (creation_time)
 );
 
 CREATE TABLE lot (
@@ -43,6 +44,7 @@ CREATE TABLE rate (
   amount INT NOT NULL,
   user_id INT NOT NULL,
   lot_id INT NOT NULL,
+  INDEX (creation_time),
   FOREIGN KEY (user_id) REFERENCES user (id),
   FOREIGN KEY (lot_id) REFERENCES lot (id)
 );
