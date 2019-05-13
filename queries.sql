@@ -1,5 +1,15 @@
 USE yeticave;
 
+/* заполняем таблицу категорий */
+INSERT INTO category (name, alias)
+VALUES
+  ('Доски и лыжи', 'boards'),
+  ('Крепления', 'attachment'),
+  ('Ботинки', 'boots'),
+  ('Одежда', 'clothing'),
+  ('Инструменты', 'tools'),
+  ('Разное', 'other');
+
 /* заполняем таблицу пользователей */
 INSERT INTO user (creation_time, email, name, password, avatar, contact)
 VALUES
@@ -20,17 +30,20 @@ VALUES
 INSERT INTO rate (creation_time, amount, user_id, lot_id)
 VALUES
   ('2019.05.02', '11900', 2, 7),
+  ('2019.05.03', '12900', 2, 7),
+  ('2019.05.03', '13900', 2, 7),
   ('2019.05.07', '6400', 1, 12);
 
 /* показываем список всех категорий */
 SELECT * FROM category;
 
 /* показываем самые новые открытые лоты */
-SELECT l.name, start_price, image, category_id, r.amount
+SELECT l.id, l.name, start_price, image, category_id, MAX(r.amount)
 FROM lot l
 LEFT JOIN category c ON category_id = c.id
 LEFT JOIN rate r ON r.lot_id = l.id
 WHERE end_time > CURRENT_TIMESTAMP
+GROUP BY l.id
 ORDER BY l.creation_time DESC;
 
 /* показываем лот по его id */
@@ -44,5 +57,5 @@ WHERE id = 7;
 
 /* выводим список ставок для лота по его id */
 SELECT amount FROM rate
-WHERE id = 7
+WHERE lot_id = 7
 ORDER BY creation_time DESC;
