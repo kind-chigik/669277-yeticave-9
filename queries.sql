@@ -29,10 +29,10 @@ VALUES
 /* заполняем таблицу ставок */
 INSERT INTO rate (creation_time, amount, user_id, lot_id)
 VALUES
-  ('2019.05.02', '11900', 2, 7),
-  ('2019.05.03', '12900', 2, 7),
-  ('2019.05.03', '13900', 2, 7),
-  ('2019.05.07', '6400', 1, 12);
+  ('2019.05.02', '11900', 2, 1),
+  ('2019.05.03', '12900', 2, 1),
+  ('2019.05.03', '13900', 2, 1),
+  ('2019.05.07', '6400', 1, 6);
 
 /* показываем список всех категорий */
 SELECT * FROM category;
@@ -49,13 +49,13 @@ ORDER BY l.creation_time DESC;
 /* показываем лот по его id */
 SELECT l.*, c.name FROM lot l
 LEFT JOIN category c ON category_id = c.id
-WHERE l.id = 7;
+WHERE l.id = 1;
 
 /* меняем название лота по его id */
 UPDATE lot SET NAME = '2014 Rossignol District Snowboard 45'
-WHERE id = 7;
+WHERE id = 1;
 
 /* выводим список ставок для лота по его id */
 SELECT amount FROM rate
-WHERE lot_id = 7
+WHERE lot_id = 1
 ORDER BY creation_time DESC;
