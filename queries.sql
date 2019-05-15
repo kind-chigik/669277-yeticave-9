@@ -9,6 +9,7 @@ VALUES
   ('Одежда', 'clothing'),
   ('Инструменты', 'tools'),
   ('Разное', 'other');
+  ('Другое', 'different');
 
 /* заполняем таблицу пользователей */
 INSERT INTO user (creation_time, email, name, password, avatar, contact)
@@ -25,6 +26,7 @@ VALUES
   ('2019.05.04', 'Ботинки для сноуборда DC Mutiny Charocal', 'Описание Ботинки для сноуборда DC Mutiny Charocal', 'img/lot-4.jpg', 10999, '2019.06.04', 500, 1, 3),
   ('2019.05.05', 'Куртка для сноуборда DC Mutiny Charocal', 'Описание Куртка для сноуборда DC Mutiny Charocal', 'img/lot-5.jpg', 7500, '2019.06.05', 500, 1, 4),
   ('2019.05.06', 'Маска Oakley Canopy', 'Описание Маска Oakley Canopy', 'img/lot-6.jpg', 5400, '2019.06.06', 500, 2, 6);
+  ('2019.05.14', 'Маска Oakley Canopy s2', 'Описание Маска Oakley Canopy s2', 'img/lot-6.jpg', 5600, '2019.06.14', 500, 2, 6);
 
 /* заполняем таблицу ставок */
 INSERT INTO rate (creation_time, amount, user_id, lot_id)
