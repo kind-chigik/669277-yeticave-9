@@ -2,11 +2,11 @@
 require_once('helpers.php');
 $config = require 'config.php';
 
-$connection = bd_connect($config['bd']);
+$connection = db_connect($config['db']);
 
-$categories = getCategories($connection);
+$categories = get_categories($connection);
 
-$lots = getLots($connection);
+$lots = get_lots($connection);
 
 $is_auth = rand(0, 1);
 $user_name = 'Inna'; // укажите здесь ваше имя
