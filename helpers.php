@@ -202,3 +202,8 @@ function get_lots($connection) {
     $lots = mysqli_fetch_all($result_lot, MYSQLI_ASSOC);
     return $lots;
 }
+
+function get_row_from_mysql ($connection, $sql) {
+    $result = mysqli_query($connection, $sql);
+    return ($result) ? mysqli_fetch_assoc($result) : die("Ошибка " . mysqli_error($connection));
+};
