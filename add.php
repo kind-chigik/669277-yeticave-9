@@ -108,7 +108,8 @@ $layout_content = include_template('layout.php', [
     'categories' => $categories,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
-    'flatpickr_css' => '../css/flatpickr.min.css'
+    'flatpickr_css' => '../css/flatpickr.min.css',
+    'title' => 'Добавление лота'
 ]);
 
 print($layout_content);
