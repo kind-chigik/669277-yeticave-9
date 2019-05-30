@@ -1,5 +1,7 @@
 <?php
 require_once('helpers.php');
+require_once('init.php');
+
 $config = require 'config.php';
 $connection = db_connect($config['db']);
 
@@ -64,7 +66,9 @@ else {                                             //если форма не о
 $layout_content = include_template('layout.php', [
     'content' => $content_sign_up,
     'categories' => $categories,
-    'title' => 'Регистрация'
+    'title' => 'Регистрация',
+    'is_auth' => $is_auth,
+    'user' => $user_name
 ]);
 
 print($layout_content);
