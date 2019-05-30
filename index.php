@@ -1,5 +1,7 @@
 <?php
 require_once('helpers.php');
+require_once('init.php');
+
 $config = require 'config.php';
 
 $connection = db_connect($config['db']);
@@ -8,8 +10,6 @@ $categories = get_categories($connection);
 
 $lots = get_lots($connection);
 
-$is_auth = rand(0, 1);
-$user_name = 'Inna'; // укажите здесь ваше имя
 
 $page_content = include_template('index.php', [
     'categories' => $categories,

@@ -1,11 +1,9 @@
 <?php
 require_once('helpers.php');
+require_once('init.php');
 
 $config = require 'config.php';
 $connection = db_connect($config['db']);
-
-$is_auth = rand(0, 1);
-$user_name = 'Inna';
 
 $categories = get_categories($connection);
 
@@ -24,13 +22,15 @@ if (empty($lot)) {
 } else {
     $page_content = include_template('lot.php', [
         'lot' => $lot,
-        'is_auth' => $is_auth
+        'is_auth' => $is_auth,
+        'user_name' => $user_name
     ]);
 };
 
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,
+    'title' => $lot['name'],
     'is_auth' => $is_auth,
     'user_name' => $user_name
 ]);

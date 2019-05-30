@@ -1,10 +1,14 @@
 <?php
 require_once('helpers.php');
+require_once('init.php');
+
+if (!isset($_SESSION['user'])) {
+    http_response_code(403);
+    die('Добавить новый лот могут только зарегистрированные пользователи.' . '<br>' . 'Чтобы добавить лот <a href="login.php">войдите на сайт</a>' . ' или <a href="sign-up.php">зарегистрируйтесь</a>.' . '<br>' . '<a href="index.php">Вернуться на главную</a>');
+}
+
 $config = require 'config.php';
 $connection = db_connect($config['db']);
-
-$is_auth = rand(0, 1);
-$user_name = 'Inna';
 
 $categories = get_categories($connection);
 $form_invalid = 'form--invalid';
