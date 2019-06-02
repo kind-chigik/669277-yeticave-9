@@ -2,8 +2,6 @@
 require_once('helpers.php');
 require_once('init.php');
 
-session_start();
-
 $config = require 'config.php';
 $connection = db_connect($config['db']);
 
