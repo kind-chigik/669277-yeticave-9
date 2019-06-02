@@ -208,6 +208,11 @@ function get_row_from_mysql ($connection, $sql) {
     return ($result) ? mysqli_fetch_assoc($result) : die("Ошибка " . mysqli_error($connection));
 };
 
+function get_rows_from_mysql($connection, $sql) {
+    $result = mysqli_query($connection, $sql);
+    return ($result) ? mysqli_fetch_all($result, MYSQLI_ASSOC) : die("Ошибка " . mysqli_error($connection));
+}
+
 function count_time($date) {
     return strtotime($date) - time();
 }

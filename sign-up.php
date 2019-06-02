@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {        //если форма отп�
     }
 
     if ($res && empty($error)) {
-        header("Location: /enter.php");
+        header("Location: login.php");
         exit();
     }
 }
