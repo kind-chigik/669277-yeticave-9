@@ -61,3 +61,6 @@ WHERE id = 1;
 SELECT amount FROM rate
 WHERE lot_id = 1
 ORDER BY creation_time DESC;
+
+/* добавим индексы для поиска */
+CREATE FULLTEXT INDEX i_search ON lot(name, description);
