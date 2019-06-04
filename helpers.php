@@ -155,7 +155,7 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-function time_before_end (string $end_time) {
+function time_before_end(string $end_time) {
     $end_time = strtotime('tomorrow');
     $time_diff =  $end_time - time();
     if ($time_diff < 0) {
@@ -167,7 +167,7 @@ function time_before_end (string $end_time) {
     return $formatting_time;
 }
 
-function less_hour_left ($end_time) {
+function less_hour_left($end_time) {
     $end_time = strtotime('tomorrow');
     $time_diff = $end_time - time();
     if ($time_diff > HOUR || $time_diff <= 0) {
@@ -203,7 +203,7 @@ function get_lots($connection) {
     return $lots;
 }
 
-function get_row_from_mysql ($connection, $sql) {
+function get_row_from_mysql($connection, $sql) {
     $result = mysqli_query($connection, $sql);
     return ($result) ? mysqli_fetch_assoc($result) : die("Ошибка " . mysqli_error($connection));
 };
@@ -216,4 +216,3 @@ function get_rows_from_mysql($connection, $sql) {
 function count_time($date) {
     return strtotime($date) - time();
 }
-
