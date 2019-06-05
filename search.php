@@ -11,6 +11,7 @@ $nav_content = include_template('nav.php', [
 ]);
 
 $search = $_GET['search'] ?? '';
+$search = htmlspecialchars($search);
 
 if ($search) {
     $sql = "SELECT COUNT(*) as cnt FROM lot l
@@ -31,7 +32,7 @@ if ($search) {
     mysqli_stmt_execute($stmt_lot);
     $result_lot = mysqli_stmt_get_result($stmt_lot);
 
-    $lots = mysqli_fetch_all($result_lot, MYSQLI_ASSOC); // получаем массив с данными на основе поискового запроса
+    $lots = mysqli_fetch_all($result_lot, MYSQLI_ASSOC);
     $search_title = empty($lots) ? 'Ничего не найдено по вашему запросу' : 'Результаты поиска по запросу ' . '«' . $search . '»';
 
     $page_content = include_template('search.php', [

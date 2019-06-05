@@ -29,7 +29,7 @@
             </ul>
         <?php endif; ?>
     </section>
-    <?php if (count($pages) > 1): ?>
+    <?php if (!empty($lots) && count($pages) > 1): ?>
         <ul class="pagination-list">
             <li class="pagination-item pagination-item-prev">
                 <?php if ($current_page > 1): ?>

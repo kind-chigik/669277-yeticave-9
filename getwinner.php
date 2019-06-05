@@ -10,8 +10,13 @@ $transport = new Swift_SmtpTransport("phpdemo.ru", 25); //Подключаемс
 $transport->setUsername("keks@phpdemo.ru");
 $transport->setPassword("htmlacademy");
 
-$sql = "SELECT id, name, end_time, winner_id from lot WHERE NOW() >= end_time AND winner_id IS NULL";
-$closed_lots = get_rows_from_mysql($connection, $sql);
+$mailer = new Swift_Mailer($transport);   //Создаем объект, ответственный за отправку сообщений
+
+$logger = new Swift_Plugins_Loggers_ArrayLogger();    //Записываем все происходящее в процессе отправки письма
+$mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
+
+$sql = "SELECT id, name, end_time, winner_id from lot WHERE end_time <= NOW() AND winner_id IS NULL";
+$closed_lots = get_rows_from_mysql($connection, $sql);    //Получили массив закрытых лотов
 
 if (!empty($closed_lots)) {
     foreach ($closed_lots as $lot) {
@@ -21,36 +26,36 @@ if (!empty($closed_lots)) {
                           JOIN user u ON r.user_id = u.id
                           WHERE r.lot_id = $lot_id
                           ORDER BY r.amount DESC LIMIT 1";
-        $max_rate = get_row_from_mysql($connection, $sql_last_rate);
-        $user = $max_rate['name'];
-        $email = $max_rate['email'];
+        $max_rate = get_row_from_mysql($connection, $sql_last_rate);  //Получили массив последних ставок в закрытых лотах
 
-        if (!empty($max_rate)) {
-            $sql_update = "UPDATE lot SET winner_id = (?) WHERE id = (?)";
-            $stmt = db_get_prepare_stmt($connection, $sql_update, [$max_rate['user_id'], $lot['id']]);
-            $res = mysqli_stmt_execute($stmt);
-
-            $mailer = new Swift_Mailer($transport);   //Создаем объект, ответственный за отправку сообщений
-
-            $logger = new Swift_Plugins_Loggers_ArrayLogger();    //Записываем все происходящее в процессе отправки
-            $mailer->registerPlugin(new Swift_Plugins_LoggerPlugin($logger));
+        if (!empty($max_rate)) {   //Если последняя ставка существует - ее считаем выигравшей. Обновим записи в БД и отправим сообщение победителю
+            $sql_winner = "UPDATE lot SET winner_id = (?) WHERE id = (?)";
+            $stmt = db_get_prepare_stmt($connection, $sql_winner, [$max_rate['user_id'], $lot['id']]);
+            $result = mysqli_stmt_execute($stmt);
+            $winner_name = $max_rate['name'];
+            $winner_email = $max_rate['email'];
 
             $message = new Swift_Message();
             $message->setSubject("Ваша ставка победила");
             $message->setFrom(['keks@phpdemo.ru' => 'YetiCave']);
-            $message->setTo([$email]);
+            $message->setTo([$winner_email]);
 
             $email_content = include_template('mail.php', [
                 'closed_lots' => $closed_lots,
                 'lot_id' => $lot_id,
                 'lot_name' => $lot_name,
-                'user' => $user
+                'winner_name' => $winner_name
             ]);
 
             $message->setBody($email_content, 'text/html');
 
-            $result = $mailer->send($message);
-            $result ? print("Письмо успешно отправлено") : print("Не удалось отправить письмо: " . $logger->dump());
+            $result_mail = $mailer->send($message);
+            if ($result_mail) {
+                print("Рассылка успешно отправлена");
+            }
+            else {
+                print("Не удалось отправить рассылку: " . $logger->dump());
+            };
         }
     }
 }
