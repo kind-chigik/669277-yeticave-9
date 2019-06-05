@@ -6,6 +6,9 @@ $config = require 'config.php';
 $connection = db_connect($config['db']);
 
 $categories = get_categories($connection);
+$nav_content = include_template('nav.php', [
+    'categories' => $categories
+]);
 
 if (!isset($_SESSION['user'])) {
     http_response_code(403);
@@ -27,6 +30,7 @@ $content = include_template('my-bets.php', [
 $layout_content = include_template('layout.php', [
     'content' => $content,
     'categories' => $categories,
+    'nav_content' => $nav_content,
     'title' => 'Moи ставки',
     'is_auth' => $is_auth,
     'user_name' => $user_name

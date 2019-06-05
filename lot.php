@@ -6,6 +6,9 @@ $config = require 'config.php';
 $connection = db_connect($config['db']);
 
 $categories = get_categories($connection);
+$nav_content = include_template('nav.php', [
+    'categories' => $categories
+]);
 
 $id = intval($_GET['id']);
 
@@ -31,6 +34,7 @@ if (empty($lot)) {     //если лота по переданным парам�
     $page_content = include_template('lot.php', [
         'lot' => $lot,
         'lot_rate' => $lot_rate,
+        'nav_content' => $nav_content,
         'is_auth' => $is_auth,
         'user_name' => $user_name,
         'user_id' => $user_id,
@@ -46,11 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {  //если форма отправ�
 
     if (empty($rate)) {    //если ставка не введена, записываем ошибку
         $error['cost'] = 'Введите ставку';
-    }
-    elseif (!is_numeric($rate) || $rate < 1) {  //если ставка не число или если она < 1, записываем ошибку
+    } elseif (!is_numeric($rate) || $rate < 1) {  //если ставка не число или если она < 1, записываем ошибку
         $error['cost'] = 'Ставка должна быть числом';
-    }
-    elseif ($rate < $min_rate) {           //если ставка меньше минимальной, записываем ошибку
+    } elseif ($rate < $min_rate) {           //если ставка меньше минимальной, записываем ошибку
         $error['cost'] = 'Ставка должна быть больше ' . $min_rate;
     }
 }
@@ -66,8 +68,7 @@ if (!empty($error)) {                       //если есть ошибки, п
         'current_price' => $current_price,
         'min_rate' => $min_rate
     ]);
-}
-else {                                      //если ошибок нет, записываем ставку в БД
+} else {                                      //если ошибок нет, записываем ставку в БД
     $sql = "INSERT INTO rate (amount, user_id, lot_id) VALUES (?, ?, ?)";
     $stmt = db_get_prepare_stmt($connection, $sql, [$rate, $user_id, $id]);
     $res = mysqli_stmt_execute($stmt);
@@ -98,6 +99,7 @@ else {                                      //если ошибок нет, за
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,
+    'nav_content' => $nav_content,
     'title' => $lot['name'],
     'is_auth' => $is_auth,
     'user_name' => $user_name

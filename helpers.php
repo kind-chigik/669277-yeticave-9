@@ -3,13 +3,16 @@ const RUB = '<b class="rub">р</b>';
 const HOUR = 3600;
 const MINUTE = 60;
 
-function formatting_amount ($amount) {
+function formatting_amount($amount)
+{
     $amount = ceil($amount);
     if ($amount >= 1000) {
         $amount = number_format($amount, null, null, ' ');
     }
     return $amount . RUB;
-};
+}
+
+;
 
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
@@ -25,7 +28,8 @@ function formatting_amount ($amount) {
  *
  * @return bool true при совпадении с форматом 'ГГГГ-ММ-ДД', иначе false
  */
-function is_date_valid(string $date) : bool {
+function is_date_valid(string $date): bool
+{
     $format_to_check = 'Y-m-d';
     $dateTimeObj = date_create_from_format($format_to_check, $date);
 
@@ -41,7 +45,8 @@ function is_date_valid(string $date) : bool {
  *
  * @return mysqli_stmt Подготовленное выражение
  */
-function db_get_prepare_stmt($link, $sql, $data = []) {
+function db_get_prepare_stmt($link, $sql, $data = [])
+{
     $stmt = mysqli_prepare($link, $sql);
 
     if ($stmt === false) {
@@ -58,12 +63,14 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
 
             if (is_int($value)) {
                 $type = 'i';
-            }
-            else if (is_string($value)) {
-                $type = 's';
-            }
-            else if (is_double($value)) {
-                $type = 'd';
+            } else {
+                if (is_string($value)) {
+                    $type = 's';
+                } else {
+                    if (is_double($value)) {
+                        $type = 'd';
+                    }
+                }
             }
 
             if ($type) {
@@ -108,9 +115,9 @@ function db_get_prepare_stmt($link, $sql, $data = []) {
  *
  * @return string Рассчитанная форма множественнго числа
  */
-function get_noun_plural_form (int $number, string $one, string $two, string $many): string
+function get_noun_plural_form(int $number, string $one, string $two, string $many): string
 {
-    $number = (int) $number;
+    $number = (int)$number;
     $mod10 = $number % 10;
     $mod100 = $number % 100;
 
@@ -138,7 +145,8 @@ function get_noun_plural_form (int $number, string $one, string $two, string $ma
  * @param array $data Ассоциативный массив с данными для шаблона
  * @return string Итоговый HTML
  */
-function include_template($name, array $data = []) {
+function include_template($name, array $data = [])
+{
     $name = 'templates/' . $name;
     $result = '';
 
@@ -155,29 +163,31 @@ function include_template($name, array $data = []) {
     return $result;
 }
 
-function time_before_end(string $end_time) {
-    $end_time = strtotime('tomorrow');
-    $time_diff =  $end_time - time();
+function time_before_end(string $end_time)
+{
+    $end_time = strtotime($end_time);
+    $time_diff = $end_time - time();
     if ($time_diff < 0) {
         return '00:00';
     }
-    $hours = floor($time_diff / HOUR);
-    $minutes = floor(($time_diff % HOUR) / MINUTE);
-    $formatting_time = sprintf("%'.02d", $hours) . ":" . sprintf("%'.02d", $minutes);
+    $formatting_time = gmdate("d:H:i", $time_diff);
     return $formatting_time;
 }
 
-function less_hour_left($end_time) {
-    $end_time = strtotime('tomorrow');
+function less_hour_left($end_time)
+{
+    $end_time = strtotime($end_time);
     $time_diff = $end_time - time();
-    if ($time_diff > HOUR || $time_diff <= 0) {
+    if ($time_diff > HOUR) {
         return false;
     }
     return true;
 }
 
-function db_connect(array $db_config) : mysqli {
-    $connection = mysqli_connect($db_config['host'], $db_config['user'], $db_config['password'], $db_config['database']);
+function db_connect(array $db_config): mysqli
+{
+    $connection = mysqli_connect($db_config['host'], $db_config['user'], $db_config['password'],
+        $db_config['database']);
     mysqli_set_charset($connection, 'utf8');
     if (!$connection) {
         die('Ошибка подключения: ' . mysqli_connect_error());
@@ -185,15 +195,17 @@ function db_connect(array $db_config) : mysqli {
     return $connection;
 }
 
-function get_categories($connection) {
+function get_categories($connection)
+{
     $sql_category = 'SELECT * FROM category';
     $result_category = mysqli_query($connection, $sql_category);
     $categories = mysqli_fetch_all($result_category, MYSQLI_ASSOC);
     return $categories;
 }
 
-function get_lots($connection) {
-    $sql_lot = 'SELECT l.id, l.name, start_price, image, category_id, MAX(r.amount) '
+function get_lots($connection)
+{
+    $sql_lot = 'SELECT l.id, l.name, start_price, image, category_id, MAX(r.amount), l.end_time '
         . 'FROM lot l '
         . 'LEFT JOIN category c ON category_id = c.id '
         . 'LEFT JOIN rate r ON r.lot_id = l.id '
@@ -203,16 +215,21 @@ function get_lots($connection) {
     return $lots;
 }
 
-function get_row_from_mysql($connection, $sql) {
+function get_row_from_mysql($connection, $sql)
+{
     $result = mysqli_query($connection, $sql);
     return ($result) ? mysqli_fetch_assoc($result) : die("Ошибка " . mysqli_error($connection));
-};
+}
 
-function get_rows_from_mysql($connection, $sql) {
+;
+
+function get_rows_from_mysql($connection, $sql)
+{
     $result = mysqli_query($connection, $sql);
     return ($result) ? mysqli_fetch_all($result, MYSQLI_ASSOC) : die("Ошибка " . mysqli_error($connection));
 }
 
-function count_time($date) {
+function count_time($date)
+{
     return strtotime($date) - time();
 }

@@ -6,6 +6,9 @@ $config = require 'config.php';
 $connection = db_connect($config['db']);
 
 $categories = get_categories($connection);
+$nav_content = include_template('nav.php', [
+    'categories' => $categories
+]);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user_enter = $_POST;
@@ -13,8 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (empty($user_enter['email'])) {  //если email не заполнен, выводим ошибку
         $error['email'] = 'Введите email';
-    }
-    else {                              //если заполнен, ищем такой email в БД
+    } else {                              //если заполнен, ищем такой email в БД
         $email = mysqli_real_escape_string($connection, $user_enter['email']);
         $sql = "SELECT * FROM user WHERE email = '$email'";
         $res = mysqli_query($connection, $sql);
@@ -27,8 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (empty($user_enter['password'])) {  //если пароль не заполнен, выводим ошибку
         $error['password'] = 'Введите пароль';
-    }
-    elseif (!password_verify($user_enter['password'], $user['password'])) {   //если пароль не совпадает, выводим ошибку
+    } elseif (!password_verify($user_enter['password'],
+        $user['password'])) {   //если пароль не совпадает, выводим ошибку
         $error['password'] = 'Вы ввели неверный пароль';;
     }
 
@@ -37,21 +39,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'error' => $error,
             'user_enter' => $user_enter
         ]);
-    }
-    else {  //если нет ошибок, открываем для юзера сессию и перенаправляем на главную
+    } else {  //если нет ошибок, открываем для юзера сессию и перенаправляем на главную
         $_SESSION['user'] = $user;
         header("Location: index.php");
         exit();
     }
 
-}
-else {  //если форма не отправлена, подключаем шаблон формы
+} else {  //если форма не отправлена, подключаем шаблон формы
     $content_enter = include_template('login.php', []);
 }
 
 $layout_content = include_template('layout.php', [
     'content' => $content_enter,
     'categories' => $categories,
+    'nav_content' => $nav_content,
     'title' => 'Вход на сайт',
     'is_auth' => $is_auth,
     'user' => $user_name

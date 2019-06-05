@@ -6,6 +6,9 @@ $config = require 'config.php';
 $connection = db_connect($config['db']);
 
 $categories = get_categories($connection);
+$nav_content = include_template('nav.php', [
+    'categories' => $categories
+]);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {        //если форма отправлена, начинаем проверки
     $new_user = $_POST;
@@ -46,11 +49,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {        //если форма отп�
             'invalid_form' => $invalid_form,
             'invalid_field' => $invalid_field
         ]);
-    }
-    else {
+    } else {
         $password_user = password_hash($new_user['password'], PASSWORD_DEFAULT);
         $sql = "INSERT INTO user (email, name, password, contact) VALUES (?, ?, ?, ?)";
-        $stmt = db_get_prepare_stmt($connection, $sql, [$new_user['email'], $new_user['name'], $password_user, $new_user['message']]);
+        $stmt = db_get_prepare_stmt($connection, $sql,
+            [$new_user['email'], $new_user['name'], $password_user, $new_user['message']]);
         $res = mysqli_stmt_execute($stmt);
     }
 
@@ -58,14 +61,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {        //если форма отп�
         header("Location: login.php");
         exit();
     }
-}
-else {                                             //если форма не отправлена, выводим форму регистрации
+} else {                                             //если форма не отправлена, выводим форму регистрации
     $content_sign_up = include_template('sign-up.php', []);
 }
 
 $layout_content = include_template('layout.php', [
     'content' => $content_sign_up,
     'categories' => $categories,
+    'nav_content' => $nav_content,
     'title' => 'Регистрация',
     'is_auth' => $is_auth,
     'user' => $user_name
