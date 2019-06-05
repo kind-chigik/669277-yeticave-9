@@ -6,6 +6,9 @@ $config = require 'config.php';
 $connection = db_connect($config['db']);
 
 $categories = get_categories($connection);
+$nav_content = include_template('nav.php', [
+    'categories' => $categories
+]);
 
 $search = $_GET['search'] ?? '';
 
@@ -38,8 +41,7 @@ if ($search) {
         'current_page' => $current_page,
         'pages' => $pages
     ]);
-}
-else {
+} else {
     $page_content = include_template('search.php', [
         'search_title' => 'Введите текст запроса'
     ]);
@@ -48,6 +50,7 @@ else {
 $layout_content = include_template('layout.php', [
     'content' => $page_content,
     'categories' => $categories,
+    'nav_content' => $nav_content,
     'title' => 'Поиск',
     'search' => $search,
     'is_auth' => $is_auth,

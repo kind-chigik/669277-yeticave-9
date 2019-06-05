@@ -11,6 +11,10 @@ $config = require 'config.php';
 $connection = db_connect($config['db']);
 
 $categories = get_categories($connection);
+$nav_content = include_template('nav.php', [
+    'categories' => $categories
+]);
+
 $form_invalid = 'form--invalid';
 $field_invalid = 'form__item--invalid';
 
@@ -34,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {  //если форма отправ�
     $error = [];
 
     foreach ($required as $key) {
-        if(empty($_POST[$key])) {
+        if (empty($_POST[$key])) {
             $error['key'] = 'Все поля должны быть заполнены';
         }
     }
@@ -69,8 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {  //если форма отправ�
         //если файл не соответсвует формату, выводим ошибку
         if ($file_type !== "image/png" && $file_type !== "image/jpeg" && $file_type !== "image/jpg") {
             $error['lot-img'] = 'Загрузите изображение в формате PNG или JPG';
-        }
-        else {      //если формат прошел проверку, перемещаем его в постоянную папку
+        } else {      //если формат прошел проверку, перемещаем его в постоянную папку
             move_uploaded_file($_FILES['lot-img']['tmp_name'], 'uploads/' . $filename);
             $lot['lot-img'] = 'uploads/' . $filename;
         }
@@ -91,7 +94,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {  //если форма отправ�
     } else {             //если нет ошибок, добавляем новый лот и переадресовываем на новую страницу лота
         $sql = 'INSERT INTO lot (name, description, image, start_price, end_time, step, user_id, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
         $lot['user_id'] = '2';
-        $stmt = db_get_prepare_stmt($connection, $sql, [$lot['lot-name'], $lot['message'], $lot['lot-img'], $lot['lot-rate'], $lot['lot-date'], $lot['lot-step'], $lot['user_id'], $lot['category']]);
+        $stmt = db_get_prepare_stmt($connection, $sql, [
+            $lot['lot-name'],
+            $lot['message'],
+            $lot['lot-img'],
+            $lot['lot-rate'],
+            $lot['lot-date'],
+            $lot['lot-step'],
+            $lot['user_id'],
+            $lot['category']
+        ]);
         $result = mysqli_stmt_execute($stmt);
         if ($result) {
             $lot_id = mysqli_insert_id($connection);
@@ -110,6 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {  //если форма отправ�
 $layout_content = include_template('layout.php', [
     'content' => $content_form,
     'categories' => $categories,
+    'nav_content' => $nav_content,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
     'flatpickr_css' => '../css/flatpickr.min.css',

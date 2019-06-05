@@ -1,6 +1,7 @@
 <?php
 require_once('helpers.php');
 require_once('init.php');
+require_once('getwinner.php');
 
 $config = require 'config.php';
 
@@ -9,7 +10,6 @@ $connection = db_connect($config['db']);
 $categories = get_categories($connection);
 
 $lots = get_lots($connection);
-
 
 $page_content = include_template('index.php', [
     'categories' => $categories,
