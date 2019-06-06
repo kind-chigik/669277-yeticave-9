@@ -3,6 +3,11 @@ const RUB = '<b class="rub">р</b>';
 const HOUR = 3600;
 const MINUTE = 60;
 
+/**
+ * Округляет число в большую сторону и добавляет пробел после тысячных
+ * @param float $amount число, которое нужно отформатировать
+ * @return float оформатированное число
+ */
 function formatting_amount($amount)
 {
     $amount = ceil($amount);
@@ -35,6 +40,8 @@ function is_date_valid(string $date): bool
 
     return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
 }
+
+;
 
 /**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
@@ -93,6 +100,8 @@ function db_get_prepare_stmt($link, $sql, $data = [])
     return $stmt;
 }
 
+;
+
 /**
  * Возвращает корректную форму множественного числа
  * Ограничения: только для целых чисел
@@ -139,6 +148,8 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
     }
 }
 
+;
+
 /**
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
  * @param string $name Путь к файлу шаблона относительно папки templates
@@ -163,6 +174,13 @@ function include_template($name, array $data = [])
     return $result;
 }
 
+;
+
+/**
+ * Определяет разницу между текущим временем и определенной датой, передает туда дату и возвращает оформитированное время
+ * @param string $end_time дата, для которой нужно посчитать разницу во времени
+ * @return string Итоговая отформатированная дата
+ */
 function time_before_end(string $end_time)
 {
     $end_time = strtotime($end_time);
@@ -174,6 +192,13 @@ function time_before_end(string $end_time)
     return $formatting_time;
 }
 
+;
+
+/**
+ * Определяет разницу между текущим временем и определенной датой, передает туда дату и возвращает true или false
+ * @param string $end_time дата, для которой нужно посчитать разницу во времени
+ * @return bool логическое значение
+ */
 function less_hour_left($end_time)
 {
     $end_time = strtotime($end_time);
@@ -184,6 +209,13 @@ function less_hour_left($end_time)
     return true;
 }
 
+;
+
+/**
+ * Устанавливает подлючение к БД, передает туда данные для подключения, возвращает результат подключения
+ * @param array $db_config массив, в котором хранятся настройки подлючения
+ * @return mysqli результат подключения
+ */
 function db_connect(array $db_config): mysqli
 {
     $connection = mysqli_connect($db_config['host'], $db_config['user'], $db_config['password'],
@@ -195,6 +227,13 @@ function db_connect(array $db_config): mysqli
     return $connection;
 }
 
+;
+
+/**
+ * Получает все категории из БД
+ * @param mysqli $connection ресурс соединения с БД
+ * @return array массив с категориями
+ */
 function get_categories($connection)
 {
     $sql_category = 'SELECT * FROM category';
@@ -203,6 +242,13 @@ function get_categories($connection)
     return $categories;
 }
 
+;
+
+/**
+ * Получает все лоты из БД
+ * @param mysqli $connection ресурс соединения с БД
+ * @return array массив с лотами
+ */
 function get_lots($connection)
 {
     $sql_lot = 'SELECT l.id, l.name, start_price, image, category_id, MAX(r.amount), l.end_time '
@@ -215,6 +261,13 @@ function get_lots($connection)
     return $lots;
 }
 
+;
+
+/**
+ * Получает одну запись из результата запроса в БД в виде массива
+ * @param mysqli $connection ресурс соединения с БД
+ * @return array массив с данными, либо ошибка, если запрос не выполнился успешно
+ */
 function get_row_from_mysql($connection, $sql)
 {
     $result = mysqli_query($connection, $sql);
@@ -223,12 +276,24 @@ function get_row_from_mysql($connection, $sql)
 
 ;
 
+/**
+ * Получает двумерные массив из результата запроса в БД
+ * @param mysqli $connection ресурс соединения с БД
+ * @return array двумерный массив с данными, либо ошибка, если запрос не выполнился успешно
+ */
 function get_rows_from_mysql($connection, $sql)
 {
     $result = mysqli_query($connection, $sql);
     return ($result) ? mysqli_fetch_all($result, MYSQLI_ASSOC) : die("Ошибка " . mysqli_error($connection));
 }
 
+;
+
+/**
+ * Определяет разницу между текущим временем и определенной датой, передает туда дату и возвращает метку времени в формате Unixtime
+ * @param string $date дата, для которой нужно посчитать разницу во времени и метку времени
+ * @return string метка времени Unixtime
+ */
 function count_time($date)
 {
     return strtotime($date) - time();

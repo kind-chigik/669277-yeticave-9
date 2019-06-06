@@ -10,10 +10,10 @@ $nav_content = include_template('nav.php', [
     'categories' => $categories
 ]);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user_enter = $_POST;
-    $error = [];
+$user_enter = $_POST;
+$error = [];
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($user_enter['email'])) {  //если email не заполнен, выводим ошибку
         $error['email'] = 'Введите email';
     } else {                              //если заполнен, ищем такой email в БД
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error['password'] = 'Введите пароль';
     } elseif (!password_verify($user_enter['password'],
         $user['password'])) {   //если пароль не совпадает, выводим ошибку
-        $error['password'] = 'Вы ввели неверный пароль';;
+        $error['password'] = 'Вы ввели неверный пароль';
     }
 
     if (!empty($error)) {    //если есть ошибки, выводим их в шаблон
@@ -46,7 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
 } else {  //если форма не отправлена, подключаем шаблон формы
-    $content_enter = include_template('login.php', []);
+    $content_enter = include_template('login.php', [
+        'error' => $error
+    ]);
 }
 
 $layout_content = include_template('layout.php', [
@@ -55,7 +57,7 @@ $layout_content = include_template('layout.php', [
     'nav_content' => $nav_content,
     'title' => 'Вход на сайт',
     'is_auth' => $is_auth,
-    'user' => $user_name
+    'user_name' => $user_name
 ]);
 
 print($layout_content);

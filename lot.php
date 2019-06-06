@@ -12,7 +12,7 @@ $nav_content = include_template('nav.php', [
 
 $id = intval($_GET['id']);
 
-$sql = "SELECT l.*, c.name as cat_name, r.amount, r.user_id FROM lot l
+$sql = "SELECT l.*, c.name as cat_name, r.amount, r.user_id as rate_user_id FROM lot l
         LEFT JOIN category c ON category_id = c.id
         LEFT JOIN rate r ON r.lot_id = '$id'
         WHERE l.id = '$id'
@@ -93,7 +93,6 @@ if (!empty($error)) {                       //если есть ошибки, п
             'min_rate' => $min_rate
         ]);
     }
-
 }
 
 $layout_content = include_template('layout.php', [
