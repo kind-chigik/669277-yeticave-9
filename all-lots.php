@@ -12,10 +12,10 @@ $nav_content = include_template('nav.php', [
 
 $cat_id = intval($_GET['id']);
 
-$sql_cat = "SELECT * FROM category WHERE id = $cat_id";
+$sql_cat = "SELECT * FROM category WHERE id = '$cat_id'";
 $category = get_row_from_mysql($connection, $sql_cat);
 
-if ($category) {
+if ($category) {                  //если категория по переданному id существует, ищем лоты с такой категорией
     $cat_name = $category['name'];
 
     $sql_count_lots = "SELECT COUNT(*) as cnt FROM lot WHERE category_id = $cat_id";
@@ -29,9 +29,9 @@ if ($category) {
 
     $sql_lot = "SELECT l.name, image, l.id, l.start_price, l.end_time, c.name AS cat_name, c.id AS cat_id FROM lot l 
         JOIN category c ON l.category_id = c.id
-        WHERE l.category_id = $cat_id
+        WHERE l.category_id = '$cat_id'
         LIMIT $limit OFFSET $offset";
-    $all_lots = get_rows_from_mysql($connection, $sql_lot);
+    $all_lots = get_rows_from_mysql($connection, $sql_lot);  //получили все лоты для категории
 
     $page_content = include_template('all-lots.php', [
         'cat_name' => $cat_name,

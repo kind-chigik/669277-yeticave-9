@@ -17,6 +17,8 @@ function formatting_amount($amount)
     return $amount . RUB;
 }
 
+;
+
 /**
  * Проверяет переданную дату на соответствие формату 'ГГГГ-ММ-ДД'
  *
@@ -38,6 +40,8 @@ function is_date_valid(string $date): bool
 
     return $dateTimeObj !== false && array_sum(date_get_last_errors()) === 0;
 }
+
+;
 
 /**
  * Создает подготовленное выражение на основе готового SQL запроса и переданных данных
@@ -96,6 +100,8 @@ function db_get_prepare_stmt($link, $sql, $data = [])
     return $stmt;
 }
 
+;
+
 /**
  * Возвращает корректную форму множественного числа
  * Ограничения: только для целых чисел
@@ -142,6 +148,8 @@ function get_noun_plural_form(int $number, string $one, string $two, string $man
     }
 }
 
+;
+
 /**
  * Подключает шаблон, передает туда данные и возвращает итоговый HTML контент
  * @param string $name Путь к файлу шаблона относительно папки templates
@@ -166,6 +174,8 @@ function include_template($name, array $data = [])
     return $result;
 }
 
+;
+
 /**
  * Определяет разницу между текущим временем и определенной датой, передает туда дату и возвращает оформитированное время
  * @param string $end_time дата, для которой нужно посчитать разницу во времени
@@ -182,6 +192,8 @@ function time_before_end(string $end_time)
     return $formatting_time;
 }
 
+;
+
 /**
  * Определяет разницу между текущим временем и определенной датой, передает туда дату и возвращает true или false
  * @param string $end_time дата, для которой нужно посчитать разницу во времени
@@ -196,6 +208,8 @@ function less_hour_left($end_time)
     }
     return true;
 }
+
+;
 
 /**
  * Устанавливает подлючение к БД, передает туда данные для подключения, возвращает результат подключения
@@ -213,6 +227,8 @@ function db_connect(array $db_config): mysqli
     return $connection;
 }
 
+;
+
 /**
  * Получает все категории из БД
  * @param mysqli $connection ресурс соединения с БД
@@ -225,6 +241,8 @@ function get_categories($connection)
     $categories = mysqli_fetch_all($result_category, MYSQLI_ASSOC);
     return $categories;
 }
+
+;
 
 /**
  * Получает все лоты из БД
@@ -243,6 +261,8 @@ function get_lots($connection)
     return $lots;
 }
 
+;
+
 /**
  * Получает одну запись из результата запроса в БД в виде массива
  * @param mysqli $connection ресурс соединения с БД
@@ -253,6 +273,8 @@ function get_row_from_mysql($connection, $sql)
     $result = mysqli_query($connection, $sql);
     return ($result) ? mysqli_fetch_assoc($result) : die("Ошибка " . mysqli_error($connection));
 }
+
+;
 
 /**
  * Получает двумерные массив из результата запроса в БД
@@ -265,9 +287,11 @@ function get_rows_from_mysql($connection, $sql)
     return ($result) ? mysqli_fetch_all($result, MYSQLI_ASSOC) : die("Ошибка " . mysqli_error($connection));
 }
 
+;
+
 /**
  * Определяет разницу между текущим временем и определенной датой, передает туда дату и возвращает метку времени в формате Unixtime
- * @param string $end_time дата, для которой нужно посчитать разницу во времени и метку времени
+ * @param string $date дата, для которой нужно посчитать разницу во времени и метку времени
  * @return string метка времени Unixtime
  */
 function count_time($date)

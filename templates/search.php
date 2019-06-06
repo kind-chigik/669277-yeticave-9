@@ -1,7 +1,7 @@
 <div class="container">
     <section class="lots">
         <h2><?= $search_title; ?></h2>
-        <?php if (!empty($lots)): ?>
+        <?php if (isset($lots)): ?>
             <ul class="lots__list">
                 <?php foreach ($lots as $key => $val): ?>
                     <li class="lots__item lot">
@@ -29,7 +29,7 @@
             </ul>
         <?php endif; ?>
     </section>
-    <?php if (!empty($lots) && count($pages) > 1): ?>
+    <?php if (isset($lots) && count($pages) > 1): ?>
         <ul class="pagination-list">
             <li class="pagination-item pagination-item-prev">
                 <?php if ($current_page > 1): ?>

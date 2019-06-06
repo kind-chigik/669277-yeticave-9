@@ -15,31 +15,29 @@ $nav_content = include_template('nav.php', [
     'categories' => $categories
 ]);
 
-$form_invalid = 'form--invalid';
-$field_invalid = 'form__item--invalid';
-
 $content_form = include_template('add.php', [
     'categories' => $categories
 ]);
+
+$error = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {  //если форма отправлена, начинаем проверки
     $lot = $_POST;
     $required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
 
     $dict = [
-        'lot-name' => 'Название лота',
-        'category' => 'Категория лота',
-        'message' => 'Описание лота',
-        'lot-img' => 'Изображение лота',
-        'lot-rate' => 'Начальная цена лота',
-        'lot-step' => 'Шаг ставки лота',
-        'lot-date' => 'Дата окончания торгов по лоту',
+        'lot-name' => 'Наименование',
+        'category' => 'Категория',
+        'message' => 'Описание',
+        'lot-img' => 'Изображение',
+        'lot-rate' => 'Начальная цена',
+        'lot-step' => 'Шаг ставки',
+        'lot-date' => 'Дата окончания торгов'
     ];
-    $error = [];
 
     foreach ($required as $key) {
-        if (empty($_POST[$key])) {
-            $error['key'] = 'Все поля должны быть заполнены';
+        if (empty($lot[$key])) {
+            $error[$key] = 'Заполните поле -' . ' ' . $dict[$key];
         }
     }
 
@@ -86,14 +84,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {  //если форма отправ�
         $content_form = include_template('add.php', [
             'categories' => $categories,
             'error' => $error,
-            'dict' => $dict,
-            'lot' => $lot,
-            'form_invalid' => $form_invalid,
-            'field_invalid' => $field_invalid
+            'lot' => $lot
         ]);
     } else {             //если нет ошибок, добавляем новый лот и переадресовываем на новую страницу лота
         $sql = 'INSERT INTO lot (name, description, image, start_price, end_time, step, user_id, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        $lot['user_id'] = '2';
+        $lot['user_id'] = $user_id;
         $stmt = db_get_prepare_stmt($connection, $sql, [
             $lot['lot-name'],
             $lot['message'],
@@ -115,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {  //если форма отправ�
 
 } else {                                   //если форма не отправлена, выводим пустую форму
     $content_form = include_template('add.php', [
-        'categories' => $categories
+        'error' => $error
     ]);
 }
 

@@ -26,7 +26,8 @@ if (!empty($closed_lots)) {
                           JOIN user u ON r.user_id = u.id
                           WHERE r.lot_id = $lot_id
                           ORDER BY r.amount DESC LIMIT 1";
-        $max_rate = get_row_from_mysql($connection, $sql_last_rate);  //Получили массив последних ставок в закрытых лотах
+        $max_rate = get_row_from_mysql($connection,
+            $sql_last_rate);  //Получили массив последних ставок в закрытых лотах
 
         if (!empty($max_rate)) {   //Если последняя ставка существует - ее считаем выигравшей. Обновим записи в БД и отправим сообщение победителю
             $sql_winner = "UPDATE lot SET winner_id = (?) WHERE id = (?)";
@@ -41,7 +42,6 @@ if (!empty($closed_lots)) {
             $message->setTo([$winner_email]);
 
             $email_content = include_template('mail.php', [
-                'closed_lots' => $closed_lots,
                 'lot_id' => $lot_id,
                 'lot_name' => $lot_name,
                 'winner_name' => $winner_name
@@ -52,8 +52,7 @@ if (!empty($closed_lots)) {
             $result_mail = $mailer->send($message);
             if ($result_mail) {
                 print("Рассылка успешно отправлена");
-            }
-            else {
+            } else {
                 print("Не удалось отправить рассылку: " . $logger->dump());
             };
         }

@@ -10,11 +10,11 @@ $nav_content = include_template('nav.php', [
     'categories' => $categories
 ]);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {        //если форма отправлена, начинаем проверки
-    $new_user = $_POST;
-    $required = ['email', 'password', 'name', 'message'];
-    $error = [];
+$new_user = $_POST;
+$error = [];
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {        //если форма отправлена, начинаем проверки
+    $required = ['email', 'password', 'name', 'message'];
     $dict = [
         'email' => 'email',
         'password' => 'Пароль',
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {        //если форма отп�
 
     foreach ($required as $key) {
         if (empty($new_user[$key])) {
-            $error[] = 'Заполните поле -' . ' ' . $dict[$key];
+            $error[$key] = 'Заполните поле -' . ' ' . $dict[$key];
         }
     }
 
@@ -41,13 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {        //если форма отп�
     }
 
     if (!empty($error)) {
-        $invalid_form = 'form--invalid';
-        $invalid_field = 'form__item--invalid';
         $content_sign_up = include_template('sign-up.php', [
             'new_user' => $new_user,
-            'error' => $error,
-            'invalid_form' => $invalid_form,
-            'invalid_field' => $invalid_field
+            'error' => $error
         ]);
     } else {
         $password_user = password_hash($new_user['password'], PASSWORD_DEFAULT);
@@ -62,7 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {        //если форма отп�
         exit();
     }
 } else {                                             //если форма не отправлена, выводим форму регистрации
-    $content_sign_up = include_template('sign-up.php', []);
+    $content_sign_up = include_template('sign-up.php', [
+        'error' => $error
+    ]);
 }
 
 $layout_content = include_template('layout.php', [
@@ -71,7 +69,7 @@ $layout_content = include_template('layout.php', [
     'nav_content' => $nav_content,
     'title' => 'Регистрация',
     'is_auth' => $is_auth,
-    'user' => $user_name
+    'user_name' => $user_name
 ]);
 
 print($layout_content);

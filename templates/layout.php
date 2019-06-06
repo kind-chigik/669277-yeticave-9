@@ -45,7 +45,7 @@
     </header>
 
     <main class="container">
-        <?= $nav_content; ?>
+        <?= isset($nav_content) ? $nav_content : '' ; ?>
         <?= $content; ?>
     </main>
 </div>
