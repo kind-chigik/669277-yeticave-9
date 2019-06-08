@@ -4,25 +4,27 @@
     <div class="form__container-two">
         <div class="form__item <?= !empty($error['lot-name']) ? 'form__item--invalid' : '' ?>">
             <label for="lot-name">Наименование <sup>*</sup></label>
-            <input id="lot-name" type="text" name="lot-name" value="<?= $lot['lot-name'] ?? ''; ?>"
+            <input id="lot-name" type="text" name="lot-name" value="<?= htmlspecialchars($lot['lot-name']) ?? ''; ?>"
                    placeholder="Введите наименование лота">
             <span class="form__error"><?= $error['lot-name'] ?? ''; ?></span>
         </div>
+
         <div class="form__item <?= !empty($error['category']) ? 'form__item--invalid' : '' ?>">
             <label for="category">Категория <sup>*</sup></label>
             <select id="category" name="category">
-                <option>Выберите категорию</option>
+                <option value="">Выберите категорию</option>
                 <?php foreach ($categories as $category): ?>
-                    <option value="<?= $category['id']; ?>"><?= $category['name']; ?></option>
+                    <option value="<?= $category['id'] ?? ''; ?>"><?= $category['name']; ?></option>
                 <?php endforeach; ?>
             </select>
             <span class="form__error"><?= $error['category'] ?? ''; ?></span>
         </div>
+
     </div>
     <div class="form__item form__item--wide <?= !empty($error['message']) ? 'form__item--invalid' : '' ?>">
         <label for="message">Описание <sup>*</sup></label>
         <textarea id="message" name="message"
-                  placeholder="Напишите описание лота"><?= $lot['message'] ?? ''; ?></textarea>
+                  placeholder="Напишите описание лота"><?= htmlspecialchars($lot['message']) ?? ''; ?></textarea>
         <span class="form__error"><?= $error['message'] ?? ''; ?></span>
     </div>
     <div class="form__item form__item--file">

@@ -19,12 +19,11 @@ $content_form = include_template('add.php', [
     'categories' => $categories
 ]);
 
+$lot = $_POST ?? '';
 $error = [];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {  //если форма отправлена, начинаем проверки
-    $lot = $_POST;
     $required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
-
     $dict = [
         'lot-name' => 'Наименование',
         'category' => 'Категория',
@@ -110,6 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {  //если форма отправ�
 
 } else {                                   //если форма не отправлена, выводим пустую форму
     $content_form = include_template('add.php', [
+        'categories' => $categories,
         'error' => $error
     ]);
 }

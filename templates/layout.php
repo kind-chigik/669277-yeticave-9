@@ -25,7 +25,7 @@
             <nav class="user-menu">
                 <?php if ($is_auth): ?>
                     <div class="user-menu__logged">
-                        <p><?= $user_name; ?></p>
+                        <p><?= htmlspecialchars($user_name); ?></p>
                         <a class="user-menu__bets" href="my-bets.php">Мои ставки</a>
                         <a class="user-menu__logout" href="logout.php">Выход</a>
                     </div>
@@ -39,7 +39,6 @@
                         </li>
                     </ul>
                 <?php endif; ?>
-                <!-- здесь должен быть PHP код для показа меню и данных пользователя -->
             </nav>
         </div>
     </header>
@@ -56,7 +55,7 @@
         <ul class="nav__list container">
             <?php foreach ($categories as $category): ?>
                 <li class="nav__item">
-                    <a href="all-lots.php?id=<?= $category['id']; ?>"><?= $category['name']; ?></a>
+                    <a href="all-lots.php?id=<?= $category['id']; ?>"><?= htmlspecialchars($category['name']); ?></a>
                 </li>
             <?php endforeach; ?>
         </ul>

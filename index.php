@@ -21,7 +21,7 @@ $layout_content = include_template('layout.php', [
     'categories' => $categories,
     'is_auth' => $is_auth,
     'user_name' => $user_name,
-    'title' => 'Главная'
+    'title' => 'Интерент-аукцион YetiCave'
 ]);
 
 print($layout_content);

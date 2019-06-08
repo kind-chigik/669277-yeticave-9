@@ -45,8 +45,7 @@ if ($search) {
 } else {
     $page_content = include_template('search.php', [
         'search_title' => 'Введите текст запроса',
-        'current_page' => $current_page,
-        'pages' => $pages
+        'current_page' => $current_page
     ]);
 }
 

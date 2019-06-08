@@ -39,6 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {        //если форма отп�
             $error['email'] = 'Пользователь с этим email уже зарегистрирован';
         }
     }
+    if (mb_strlen($new_user['name']) > 64) {
+        $error['name'] = 'Вы превысили допустимое количество символов';
+    }
 
     if (!empty($error)) {
         $content_sign_up = include_template('sign-up.php', [
