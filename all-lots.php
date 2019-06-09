@@ -10,14 +10,13 @@ $nav_content = include_template('nav.php', [
     'categories' => $categories
 ]);
 
-$cat_id = intval($_GET['id']);
+$cat_id = intval($_GET['id']) ?? '';
 
 $sql_cat = "SELECT * FROM category WHERE id = '$cat_id'";
 $category = get_row_from_mysql($connection, $sql_cat);
+$cat_name = $category['name'];
 
 if ($category) {                  //если категория по переданному id существует, ищем лоты с такой категорией
-    $cat_name = $category['name'];
-
     $sql_count_lots = "SELECT COUNT(*) as cnt FROM lot WHERE category_id = $cat_id";
     $stmt = db_get_prepare_stmt($connection, $sql_count_lots);
     mysqli_stmt_execute($stmt);
@@ -25,7 +24,7 @@ if ($category) {                  //если категория по перед�
     $items_count = mysqli_fetch_assoc($result_count_lots)['cnt'];
     $pages_count = ceil($items_count / $limit);
     $offset = ($current_page - 1) * $limit;
-    $pages = range(1, $pages_count);
+    $pages = range(1, $pages_count); //получили массив с номерами всех страниц
 
     $sql_lot = "SELECT l.name, image, l.id, l.start_price, l.end_time, c.name AS cat_name, c.id AS cat_id FROM lot l 
         JOIN category c ON l.category_id = c.id

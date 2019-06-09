@@ -10,7 +10,9 @@ $nav_content = include_template('nav.php', [
     'categories' => $categories
 ]);
 
-$id = intval($_GET['id']);
+$id = intval($_GET['id']) ?? '';
+$rate = $_POST['cost'] ?? '';
+$error = [];
 
 $sql = "SELECT l.*, c.name as cat_name, r.amount, r.user_id as rate_user_id FROM lot l
         LEFT JOIN category c ON category_id = c.id
@@ -27,7 +29,12 @@ $lot = get_row_from_mysql($connection, $sql);
 $lot_rate = get_rows_from_mysql($connection, $sql_rate);
 $current_price = $lot_rate[0]['amount'] ?? $lot['start_price'];
 $min_rate = $current_price + $lot['step'];
+$rate_not_current_user = $lot['rate_user_id'] !== $user_id ? true : false;
+$dif_time = count_time($lot['end_time']);
+$time_lot_not_end = $dif_time > 1 ? true : false;
+$count_rate = count($lot_rate);
 
+//Проверяем существование лота
 if (empty($lot)) {     //если лота по переданным параметрам не существует, устанавливаем 404 ошибку
     http_response_code(404);
 } else {               //если лот существует, подключаем шаблон лота
@@ -39,14 +46,14 @@ if (empty($lot)) {     //если лота по переданным парам�
         'user_name' => $user_name,
         'user_id' => $user_id,
         'current_price' => $current_price,
-        'min_rate' => $min_rate
+        'min_rate' => $min_rate,
+        'rate_not_current_user' => $rate_not_current_user,
+        'time_lot_not_end' => $time_lot_not_end,
+        'count_rate' => $count_rate
     ]);
 };
-
 //Проверяем форму
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {  //если форма отправлена, начинаем проверки полей
-    $rate = $_POST['cost'];
-    $error = [];
 
     if (empty($rate)) {    //если ставка не введена, записываем ошибку
         $error['cost'] = 'Введите ставку';
@@ -66,7 +73,10 @@ if (!empty($error)) {                       //если есть ошибки, п
         'user_id' => $user_id,
         'lot_rate' => $lot_rate,
         'current_price' => $current_price,
-        'min_rate' => $min_rate
+        'min_rate' => $min_rate,
+        'rate_not_current_user' => $rate_not_current_user,
+        'time_lot_not_end' => $time_lot_not_end,
+        'count_rate' => $count_rate
     ]);
 } else {                                      //если ошибок нет, записываем ставку в БД
     $sql = "INSERT INTO rate (amount, user_id, lot_id) VALUES (?, ?, ?)";
@@ -82,6 +92,8 @@ if (!empty($error)) {                       //если есть ошибки, п
         $lot_rate = get_rows_from_mysql($connection, $sql_rate);
         $current_price = $lot_rate[0]['amount'];
         $min_rate = $current_price + $lot['step'];
+        $rate_not_current_user = $lot[0]['rate_user_id'] !== $user_id ?  true : false;
+        $count_rate = count($lot_rate);
         $page_content = include_template('lot.php', [
             'error' => $error,
             'lot' => $lot,
@@ -90,7 +102,10 @@ if (!empty($error)) {                       //если есть ошибки, п
             'user_id' => $user_id,
             'lot_rate' => $lot_rate,
             'current_price' => $current_price,
-            'min_rate' => $min_rate
+            'min_rate' => $min_rate,
+            'rate_not_current_user' => $rate_not_current_user,
+            'time_lot_not_end' => $time_lot_not_end,
+            'count_rate' => $count_rate
         ]);
     }
 }
