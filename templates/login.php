@@ -2,7 +2,7 @@
     <h2>Вход</h2>
     <div class="form__item <?= !empty($error['email']) ? 'form__item--invalid' : '' ?>">
         <label for="email">E-mail <sup>*</sup></label>
-        <input id="email" type="text" name="email" value="<?= htmlspecialchars($user_enter['email']) ?? ''; ?>"
+        <input id="email" type="text" name="email" value="<?= isset($user_enter['email']) ? htmlspecialchars($user_enter['email']) : ''; ?>"
                placeholder="Введите e-mail">
         <span class="form__error"><?= $error['email'] ?? ''; ?></span>
     </div>

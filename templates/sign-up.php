@@ -2,7 +2,7 @@
     <h2>Регистрация нового аккаунта</h2>
     <div class="form__item <?= !empty($error['email']) ? 'form__item--invalid' : '' ?>">
         <label for="email">E-mail <sup>*</sup></label>
-        <input id="email" type="text" name="email" value="<?= htmlspecialchars($new_user['email']) ?? ''; ?>"
+        <input id="email" type="text" name="email" value="<?= isset($new_user['email']) ? htmlspecialchars($new_user['email']) : ''; ?>"
                placeholder="Введите e-mail">
         <span class="form__error"><?= $error['email'] ?? ''; ?></span>
     </div>
@@ -13,13 +13,13 @@
     </div>
     <div class="form__item <?= !empty($error['name']) ? 'form__item--invalid' : '' ?>">
         <label for="name">Имя <sup>*</sup></label>
-        <input id="name" type="text" name="name" value="<?= htmlspecialchars($new_user['name']) ?? ''; ?>" placeholder="Введите имя">
+        <input id="name" type="text" name="name" value="<?= isset($new_user['name']) ? htmlspecialchars($new_user['name']) : ''; ?>" placeholder="Введите имя">
         <span class="form__error">Введите имя</span>
     </div>
     <div class="form__item <?= !empty($error['message']) ? 'form__item--invalid' : '' ?>">
         <label for="message">Контактные данные <sup>*</sup></label>
         <textarea id="message" name="message"
-                  placeholder="Напишите как с вами связаться"><?= htmlspecialchars($new_user['message']) ?? ''; ?></textarea>
+                  placeholder="Напишите как с вами связаться"><?= isset($new_user['message']) ? htmlspecialchars($new_user['message']) : ''; ?></textarea>
         <span class="form__error">Напишите как с вами связаться</span>
     </div>
 

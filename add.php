@@ -22,7 +22,7 @@ $content_form = include_template('add.php', [
 $lot = $_POST ?? '';
 $error = [];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {  //если форма отправлена, начинаем проверки
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {  //если форма отправлена, начинаем проверки
     $required = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-date'];
     $dict = [
         'lot-name' => 'Наименование',
@@ -41,17 +41,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {  //если форма отправ�
     }
 
     foreach ($lot as $key => $value) {
-        if ($key == 'lot-rate') {
+        if ($key === 'lot-rate') {
             if (!is_numeric($value) || $value < 1) {
                 $error['lot-rate'] = 'Начальная ставка должна быть числом больше 0';
             }
         }
-        if ($key == 'lot-step') {
+        if ($key === 'lot-step') {
             if (!filter_var($value, FILTER_VALIDATE_INT) || $value < 1) {
                 $error['lot-step'] = 'Шаг ставки должен быть целым числом больше 0';
             }
         }
-        if ($key == 'lot-date') {
+        if ($key === 'lot-date') {
             if (!is_date_valid($value)) {
                 $error['lot-date'] = 'Дата окончания торгов должна быть введена в формате «год-месяц-день»';
             }

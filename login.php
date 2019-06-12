@@ -13,7 +13,7 @@ $nav_content = include_template('nav.php', [
 $user_enter = $_POST;
 $error = [];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($user_enter['email'])) {  //если email не заполнен, выводим ошибку
         $error['email'] = 'Введите email';
     } else {                              //если заполнен, ищем такой email в БД
@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 } else {  //если форма не отправлена, подключаем шаблон формы
     $content_enter = include_template('login.php', [
+        'user_enter' => $user_enter,
         'error' => $error
     ]);
 }

@@ -227,7 +227,7 @@ function get_categories($connection)
  */
 function get_lots($connection)
 {
-    $sql_lot = 'SELECT l.id, l.name, start_price, image, category_id, MAX(r.amount), l.end_time '
+    $sql_lot = 'SELECT l.id, l.name, start_price, image, category_id, MAX(r.amount), l.end_time, c.name as category '
         . 'FROM lot l '
         . 'LEFT JOIN category c ON category_id = c.id '
         . 'LEFT JOIN rate r ON r.lot_id = l.id '

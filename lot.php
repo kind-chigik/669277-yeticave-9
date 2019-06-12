@@ -19,7 +19,7 @@ $sql = "SELECT l.*, c.name as cat_name, r.amount, r.user_id as rate_user_id FROM
         LEFT JOIN rate r ON r.lot_id = '$id'
         WHERE l.id = '$id'
         ORDER BY r.amount DESC";
-$sql_rate = "SELECT r.id, r.creation_time, r.amount, r.lot_id, u.id, u.name FROM rate r
+$sql_rate = "SELECT r.id, r.creation_time, r.amount, r.lot_id, u.id as u_id, u.name FROM rate r
             LEFT JOIN user u ON u.id = r.user_id
             WHERE r.lot_id = '$id'
             ORDER BY r.amount
@@ -53,7 +53,7 @@ if (empty($lot)) {     //если лота по переданным парам�
     ]);
 };
 //Проверяем форму
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {  //если форма отправлена, начинаем проверки полей
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {  //если форма отправлена, начинаем проверки полей
 
     if (empty($rate)) {    //если ставка не введена, записываем ошибку
         $error['cost'] = 'Введите ставку';
@@ -84,7 +84,7 @@ if (!empty($error)) {                       //если есть ошибки, п
     $res = mysqli_stmt_execute($stmt);
 
     if ($res) {
-        $sql_rate = "SELECT r.id, r.creation_time, r.amount, r.lot_id, u.id, u.name FROM rate r
+        $sql_rate = "SELECT r.id, r.creation_time, r.amount, r.lot_id, u.id as u_id, u.name FROM rate r
             LEFT JOIN user u ON u.id = r.user_id
             WHERE r.lot_id = '$id'
             ORDER BY r.amount
@@ -92,7 +92,7 @@ if (!empty($error)) {                       //если есть ошибки, п
         $lot_rate = get_rows_from_mysql($connection, $sql_rate);
         $current_price = $lot_rate[0]['amount'];
         $min_rate = $current_price + $lot['step'];
-        $rate_not_current_user = $lot[0]['rate_user_id'] !== $user_id ?  true : false;
+        $rate_not_current_user = $lot_rate[0]['u_id'] !== $user_id ? true : false;
         $count_rate = count($lot_rate);
         $page_content = include_template('lot.php', [
             'error' => $error,
