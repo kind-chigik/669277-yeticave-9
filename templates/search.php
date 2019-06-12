@@ -1,6 +1,6 @@
 <div class="container">
     <section class="lots">
-        <h2><?= htmlspecialchars($search_title) ?? ''; ?></h2>
+        <h2><?= isset($search_title) ? htmlspecialchars($search_title) : ''; ?></h2>
         <?php if (isset($lots)): ?>
             <ul class="lots__list">
                 <?php foreach ($lots as $key => $val): ?>

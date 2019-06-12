@@ -10,6 +10,7 @@
         <?php endforeach; ?>
     </ul>
 </section>
+<?php if (isset($lots)) : ?>
 <section class="lots">
     <div class="lots__header">
         <h2>Открытые лоты</h2>
@@ -39,3 +40,4 @@
         <?php endforeach; ?>
     </ul>
 </section>
+<?php endif; ?>

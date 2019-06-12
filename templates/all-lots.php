@@ -1,6 +1,6 @@
 <div class="container">
     <section class="lots">
-        <h2>Все лоты в категории <span><?= htmlspecialchars($cat_name); ?></span></h2>
+        <h2>Все лоты в категории <span><?= isset($cat_name) ? htmlspecialchars($cat_name) : ''; ?></span></h2>
         <?php if (isset($all_lots)) : ?>
             <ul class="lots__list">
                 <?php foreach ($all_lots as $lot) : ?>
@@ -9,7 +9,7 @@
                             <img src="<?= $lot['image']; ?>" width="350" height="260" alt="Сноуборд">
                         </div>
                         <div class="lot__info">
-                            <span class="lot__category"><?= $cat_name; ?></span>
+                            <span class="lot__category"><?= isset($lot['cat_name']) ? htmlspecialchars($lot['cat_name']) : ''; ?></span>
                             <h3 class="lot__title"><a class="text-link"
                                                       href="lot.php?id=<?= $lot['id']; ?>"><?= htmlspecialchars($lot['name']); ?></a></h3>
                             <div class="lot__state">
@@ -27,7 +27,7 @@
             </ul>
         <?php endif; ?>
     </section>
-    <?php if (!empty($all_lots) && count($pages) > 1) : ?>
+    <?php if (!empty($all_lots) && isset($pages) && count($pages) > 1) : ?>
         <ul class="pagination-list">
             <li class="pagination-item pagination-item-prev">
                 <?php if ($current_page > 1): ?>

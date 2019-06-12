@@ -34,8 +34,8 @@
                 </div>
             <?php endif; ?>
             <div class="history">
-                <h3>История ставок (<span><?= $count_rate ?? 0; ?></span>)</h3>
-                <?php if ($lot_rate) : ?>
+                <h3>История ставок (<span><?= isset($count_rate) ? $count_rate : 0; ?></span>)</h3>
+                <?php if (isset($lot_rate)) : ?>
                 <table class="history__list">
                     <?php foreach ($lot_rate as $rate): ?>
                         <tr class="history__item">
